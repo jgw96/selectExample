@@ -1,5 +1,5 @@
-import {Component, NgZone} from '@angular/core';
-import {NavController, ToastController, App, AlertController} from 'ionic-angular';
+import { Component, NgZone } from '@angular/core';
+import { NavController, App } from 'ionic-angular';
 
 import { ContactPage } from '../contact/contact';
 
@@ -8,29 +8,34 @@ import { ContactPage } from '../contact/contact';
 })
 export class HomePage {
 
-  items: any[];
-  coolbool: boolean;
+  hiddenBool: boolean;
 
-  constructor(private navCtrl: NavController, private app: App, private alertCtrl: AlertController, private zone: NgZone) {
-    this.items = [];
-  }
+  constructor(
+    private navCtrl: NavController,
+    private zone: NgZone,
+    private app: App
+  ) {
+    this.zone.onUnstable.subscribe(() => {
+      console.log('zone enter');
+    });
 
-  ionViewLoaded() {
-    console.log(Date.now());
-  }
+    this.zone.onStable.subscribe(() => {
+      console.log('zone leave');
+    });
+  };
 
   ionViewDidEnter() {
-    this.coolbool = true;
+    this.hiddenBool = true;
+    //this.app.getRootNav().push(ContactPage);
+    
   }
 
-  pushPage() {
-    this.navCtrl.push(ContactPage);
-  }
-
-  toggleStep() {
+  coolStuff() {
     console.log('fired');
-    this.zone.run(() => {
-      this.coolbool = false;
-    });
+    this.hiddenBool = false;
+  }
+
+  alert() {
+    console.log('fired');
   }
 }
