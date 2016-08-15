@@ -1,5 +1,5 @@
-import {Component} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import { Component } from '@angular/core';
+import { NavController, LoadingController } from 'ionic-angular';
 
 import { AboutPage } from '../about/about';
 
@@ -7,12 +7,22 @@ import { AboutPage } from '../about/about';
   templateUrl: 'build/pages/contact/contact.html'
 })
 export class ContactPage {
-  constructor(private navCtrl: NavController) {
+  loader: any;
+  constructor(private navCtrl: NavController, private loadingCtrl: LoadingController) {
   }
 
   ionViewDidEnter() {
     setTimeout(() => {
-      this.navCtrl.push(AboutPage);
-    }, 1000);
+      this.loader = this.loadingCtrl.create({
+        content: 'loading...'
+      });
+      this.loader.present();
+    }, 500);
+
+    setTimeout(() => {
+      this.loader.dismiss().then(() => {
+        this.navCtrl.pop();
+      });
+    }, 3000);
   }
 }

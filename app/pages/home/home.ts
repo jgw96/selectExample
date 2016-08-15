@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, App } from 'ionic-angular';
+import { NavController, LoadingController, App } from 'ionic-angular';
 
 import { ContactPage } from '../contact/contact';
 
@@ -9,11 +9,13 @@ import { ContactPage } from '../contact/contact';
 export class HomePage {
 
   hiddenBool: boolean;
+  loader: any;
 
   constructor(
     private navCtrl: NavController,
     private zone: NgZone,
-    private app: App
+    private app: App,
+    private loadingCtrl: LoadingController
   ) {
     this.zone.onUnstable.subscribe(() => {
       console.log('zone enter');
@@ -26,7 +28,18 @@ export class HomePage {
 
   ionViewDidEnter() {
     this.hiddenBool = true;
-    //this.app.getRootNav().push(ContactPage);
+    setTimeout(() => {
+      this.loader = this.loadingCtrl.create({
+        content: 'loading...'
+      });
+      this.loader.present();
+    }, 500);
+
+    setTimeout(() => {
+      this.loader.dismiss().then(() => {
+        this.navCtrl.push(ContactPage);
+      })
+    }, 3000);
     
   }
 
@@ -36,6 +49,5 @@ export class HomePage {
   }
 
   alert() {
-    console.log('fired');
   }
 }
