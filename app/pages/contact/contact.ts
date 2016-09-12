@@ -12,17 +12,10 @@ export class ContactPage {
   }
 
   ionViewDidEnter() {
-    setTimeout(() => {
-      this.loader = this.loadingCtrl.create({
-        content: 'loading...'
-      });
-      this.loader.present();
-    }, 500);
 
-    setTimeout(() => {
-      this.loader.dismiss().then(() => {
-        this.navCtrl.pop();
-      });
-    }, 3000);
+  }
+
+  open() {
+    console.log('whats up');
   }
 }

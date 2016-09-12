@@ -1,53 +1,49 @@
-import { Component, NgZone } from '@angular/core';
-import { NavController, LoadingController, App } from 'ionic-angular';
+import { Component, NgZone, Input,
+  trigger,
+  state,
+  style,
+  transition,
+  animate } from '@angular/core';
+import { NavController, LoadingController, AlertController, App, PopoverController } from 'ionic-angular';
 
 import { ContactPage } from '../contact/contact';
 
 @Component({
-  templateUrl: 'build/pages/home/home.html'
+  templateUrl: 'build/pages/home/home.html',
+  animations: [
+    trigger('flyInOut', [
+      state('in', style({ transform: 'translateX(0)' })),
+      transition('void => *', [
+        style({ transform: 'translateX(100%)' }),
+        animate('300ms 500ms ease-in-out')
+      ]),
+      transition('* => void', [
+        animate('40ms ease-in', style({ transform: 'translateX(-100%)' }))
+      ])
+    ])
+  ]
 })
 export class HomePage {
 
-  hiddenBool: boolean;
-  loader: any;
+  state: string;
 
   constructor(
     private navCtrl: NavController,
     private zone: NgZone,
     private app: App,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private alertCtrl: AlertController,
+    private popoverCtrl: PopoverController
   ) {
-    this.zone.onUnstable.subscribe(() => {
-      console.log('zone enter');
-    });
 
-    this.zone.onStable.subscribe(() => {
-      console.log('zone leave');
-    });
   };
 
-  ionViewDidEnter() {
-    this.hiddenBool = true;
-    setTimeout(() => {
-      this.loader = this.loadingCtrl.create({
-        content: 'loading...'
-      });
-      this.loader.present();
-    }, 500);
-
-    setTimeout(() => {
-      this.loader.dismiss().then(() => {
-        this.navCtrl.push(ContactPage);
-      })
-    }, 3000);
-    
+  toggleState() {
+    this.state = (this.state === 'active' ? 'inactive' : 'active');
   }
 
-  coolStuff() {
-    console.log('fired');
-    this.hiddenBool = false;
-  }
-
-  alert() {
+  openPopover() {
+    let popover = this.popoverCtrl.create(ContactPage);
+    popover.present();
   }
 }
